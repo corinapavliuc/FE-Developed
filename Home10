@@ -1,0 +1,76 @@
+html
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Form</title>
+</head>
+<body>
+    <form id="userForm">
+        <input type="text" id="firstName" placeholder="First Name">
+        <input type="text" id="lastName" placeholder="Last Name">
+        <input type="number" id="age" placeholder="Age">
+        <button type="submit">Submit</button>
+    </form>
+
+    <div id="userContainer"></div>
+
+    <script>
+       
+        var users = [];
+
+        function addUser(event) {
+            event.preventDefault();
+
+            var firstName = document.getElementById('firstName').value;
+            var lastName = document.getElementById('lastName').value;
+            var age = document.getElementById('age').value;
+
+            var user = {
+                id: Date.now(), // Генерируем уникальный id
+                firstName: firstName,
+                lastName: lastName,
+                age: age
+            };
+
+            users.push(user);
+
+        
+            document.getElementById('userForm').reset();
+
+            rerender();
+        }
+
+
+        function deleteUser(id) {
+            users = users.filter(function(user) {
+                return user.id !== id;
+            });
+
+            rerender();
+        }
+
+        
+        function rerender() {
+            var userContainer = document.getElementById('userContainer');
+            userContainer.innerHTML = '';
+
+            users.forEach(function(user) {
+                var userCard = document.createElement('div');
+                userCard.classList.add('user-card');
+                userCard.innerHTML = '<h3>' + user.firstName + ' ' + user.lastName + '</h3>' +
+                                     '<p>Age: ' + user.age + '</p>';
+
+              
+                userCard.addEventListener('dblclick', function() {
+                    deleteUser(user.id);
+                });
+
+                userContainer.appendChild(userCard);
+            });
+        }
+
+ 
+        document.getElementById('userForm').addEventListener('submit', addUser);
+    </script>
+</body>
+</html>
